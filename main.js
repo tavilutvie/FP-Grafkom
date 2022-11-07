@@ -42,7 +42,7 @@ initScene = () => {
         1,
         1000
     );
-    camera.position.set(250, 0, 280);
+    camera.position.set(300, 0, 0);
     camera.lookAt(scene.position);
     scene.add(camera);
 

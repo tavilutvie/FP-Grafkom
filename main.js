@@ -1,9 +1,9 @@
 Physijs.scripts.worker = '/libs/physijs_worker.js';
 Physijs.scripts.ammo = '/libs/ammo.js';
 
-let initScene,
-    render,
+let render,
     ground_material,
+    wall_material,
     border_material,
     robot_material,
     ball_material,
@@ -12,6 +12,7 @@ let initScene,
     wheel_pos_y,
     renderer,
     scene,
+    wall = {},
     ground = {},
     light,
     camera,
@@ -21,8 +22,8 @@ let initScene,
     checkRobotPosition,
     createBall,
     checkBallPosition;
-
-initScene = () => {
+    
+function sceneInit() {
     renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setClearColor('#e5e5e5');
@@ -51,7 +52,7 @@ initScene = () => {
     controls.minPolarAngle = Math.PI * 0.3;
     controls.maxPolarAngle = Math.PI * 0.4;
     controls.target.set(0, 40, 0);
-    controls.enableZoom = false;
+    controls.enableZoom = true;
 
     // LIGHTS
     var light = new THREE.HemisphereLight(0xd1cb1d, 0x1d29d1, 1);
@@ -84,12 +85,13 @@ initScene = () => {
         texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
         texture.offset.set(0, 0);
     });
+    
     border_material = Physijs.createMaterial(
         new THREE.MeshLambertMaterial({
             map: border_texture,
         }),
-        0.1,
-        0.9
+        10,
+        10
     );
 
     border_material.map.wrapS = border_material.map.wrapT =
@@ -101,9 +103,9 @@ initScene = () => {
     // GROUND - BORDERS - EAST
     ground.east_border = new Physijs.BoxMesh(
         new THREE.BoxGeometry(2, border_height, 200),
-        ground_material,
+        border_material,
         0, 
-        { restitution: 0.9, friction: 0.1 }
+        { restitution: 10, friction: 10 }
     );
     ground.east_border.position.set(99, border_height / 2 + 0.5, 0);
     scene.add(ground.east_border);
@@ -111,9 +113,9 @@ initScene = () => {
     // GROUND - BORDERS - WEST
     ground.west_border = new Physijs.BoxMesh(
         new THREE.BoxGeometry(2, border_height, 200),
-        ground_material,
+        border_material,
         0, 
-        { restitution: 0.9, friction: 0.1 }
+        { restitution: 10, friction: 10 }
     );
     ground.west_border.position.set(-99, border_height / 2 + 0.5, 0);
     scene.add(ground.west_border);
@@ -121,18 +123,18 @@ initScene = () => {
     // GROUND - BORDERS - NORTH
     ground.north_border_1 = new Physijs.BoxMesh(
         new THREE.BoxGeometry(76, border_height, 2),
-        ground_material,
+        border_material,
         0, 
-        { restitution: 0.9, friction: 0.1 }
+        { restitution: 10, friction: 10 }
     );
     ground.north_border_1.position.set(-60, border_height / 2 + 0.5, -99);
     scene.add(ground.north_border_1);
 
     ground.north_border_2 = new Physijs.BoxMesh(
         new THREE.BoxGeometry(76, border_height, 2),
-        ground_material,
+        border_material,
         0, 
-        { restitution: 0.9, friction: 0.1 }
+        { restitution: 10, friction: 10 }
     );
     ground.north_border_2.position.set(60, border_height / 2 + 0.5, -99);
     scene.add(ground.north_border_2);
@@ -140,23 +142,23 @@ initScene = () => {
     // GROUND - BORDERS - SOUTH
     ground.south_border_1 = new Physijs.BoxMesh(
         new THREE.BoxGeometry(76, border_height, 2),
-        ground_material,
+        border_material,
         0, 
-        { restitution: 0.9, friction: 0.1 }
+        { restitution: 10, friction: 10 }
     );
     ground.south_border_1.position.set(-60, border_height / 2 + 0.5, 99);
     scene.add(ground.south_border_1);
 
     ground.south_border_2 = new Physijs.BoxMesh(
         new THREE.BoxGeometry(76, border_height, 2),
-        ground_material,
+        border_material,
         0, 
-        { restitution: 0.9, friction: 0.1 }
+        { restitution: 10, friction: 10 }
     );
     ground.south_border_2.position.set(60, border_height / 2 + 0.5, 99);
     scene.add(ground.south_border_2);
 
-     // ROBOT
+     // car
      createRobot = (rbx, rby) => {
         robot_material = Physijs.createMaterial(
             new THREE.MeshLambertMaterial({ color: 0x5ab7cc  }),
@@ -319,15 +321,15 @@ initScene = () => {
                     1,
                     -Math.PI / 4,
                     Math.PI / 4,
-                    1,
-                    200
+                    2,
+                    400
                 );
                 robot.wheel_fr_constraint.configureAngularMotor(
                     1,
                     -Math.PI / 4,
                     Math.PI / 4,
-                    1,
-                    200
+                    2,
+                    400
                 );
                 robot.wheel_fl_constraint.enableAngularMotor(1);
                 robot.wheel_fr_constraint.enableAngularMotor(1);
@@ -340,15 +342,15 @@ initScene = () => {
                     1,
                     -Math.PI / 4,
                     Math.PI / 4,
-                    -1,
-                    200
+                    -2,
+                    400
                 );
                 robot.wheel_fr_constraint.configureAngularMotor(
                     1,
                     -Math.PI / 4,
                     Math.PI / 4,
-                    -1,
-                    200
+                    -2,
+                    400
                 );
                 robot.wheel_fl_constraint.enableAngularMotor(1);
                 robot.wheel_fr_constraint.enableAngularMotor(1);
@@ -361,15 +363,15 @@ initScene = () => {
                     2,
                     1,
                     0,
-                    15,
-                    3000
+                    30,
+                    6000
                 );
                 robot.wheel_br_constraint.configureAngularMotor(
                     2,
                     1,
                     0,
-                    15,
-                    3000
+                    30,
+                    6000
                 );
                 robot.wheel_bl_constraint.enableAngularMotor(2);
                 robot.wheel_br_constraint.enableAngularMotor(2);
@@ -382,15 +384,15 @@ initScene = () => {
                     2,
                     1,
                     0,
-                    -10,
-                    12000
+                    -20,
+                    24000
                 );
                 robot.wheel_br_constraint.configureAngularMotor(
                     2,
                     1,
                     0,
-                    -10,
-                    12000
+                    -20,
+                    24000
                 );
                 robot.wheel_bl_constraint.enableAngularMotor(2);
                 robot.wheel_br_constraint.enableAngularMotor(2);
@@ -438,7 +440,7 @@ initScene = () => {
             new THREE.SphereGeometry(5, 18, 20),
             ball_material,
             20, // mass
-            { restitution: 0.9, friction: 0.9 }
+            { restitution: 10, friction: 10 }
         );
         ball.position.x = -10;
         ball.position.y = 25;
@@ -473,4 +475,4 @@ render = function () {
     controls.update();
 };
 
-window.onload = initScene;
+window.onload = sceneInit();

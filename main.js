@@ -22,7 +22,8 @@ let render,
     createRobot,
     checkRobotPosition,
     createBall,
-    checkBallPosition;
+    checkBallPosition,
+    scoreOneTwo = [0, 0];
     
 function sceneInit() {
     renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -54,7 +55,6 @@ function sceneInit() {
     controls.maxPolarAngle = Math.PI * 0.4;
     controls.target.set(0, 40, 0);
     controls.enableZoom = true;
-
     // LIGHTS
     var light = new THREE.HemisphereLight(0xd1cb1d, 0x1d29d1, 1);
     light.position.set(0, 10, 0);
@@ -101,7 +101,7 @@ function sceneInit() {
 
     const border_height = 20;
     const borderGeoOne = new THREE.BoxGeometry(2, border_height, 200)
-    const borderGeoTwo = new THREE.BoxGeometry(76, border_height, 2)
+    const borderGeoTwo = new THREE.BoxGeometry(1, border_height, 2)
 
     // GROUND - BORDERS - EAST
     ground.east_border = new Physijs.BoxMesh(
@@ -162,7 +162,7 @@ function sceneInit() {
     scene.add(ground.south_border_2);
 
      // car
-     createRobot = (rbx, rby) => {
+     createRobot = (rbx, rby, rbz) => {
         let robot = {};
         robot_material = Physijs.createMaterial(
             new THREE.MeshLambertMaterial({ color: 0x5ab7cc  }),
@@ -619,7 +619,7 @@ function sceneInit() {
         //     robot2.wheel_br_constraint.enableAngularMotor(2);
         // }
         switch (ev.keyCode) {
-            case 37:
+            case 74:
                 // ------------------------------------------------------------------
                 // Left
                 robot2.wheel_fl_constraint.configureAngularMotor(
@@ -640,7 +640,7 @@ function sceneInit() {
                 robot2.wheel_fr_constraint.enableAngularMotor(1);
                 break;
 
-            case 39:
+            case 76:
                 // ------------------------------------------------------------------
                 // Right
                 robot2.wheel_fl_constraint.configureAngularMotor(
@@ -661,7 +661,7 @@ function sceneInit() {
                 robot2.wheel_fr_constraint.enableAngularMotor(1);
                 break;
 
-            case 38:
+            case 73:
                 // ------------------------------------------------------------------
                 // Up
                 robot2.wheel_bl_constraint.configureAngularMotor(
@@ -682,7 +682,7 @@ function sceneInit() {
                 robot2.wheel_br_constraint.enableAngularMotor(2);
                 break;
 
-            case 40:
+            case 75:
                 // ------------------------------------------------------------------
                 // Down
                 robot2.wheel_bl_constraint.configureAngularMotor(
@@ -731,25 +731,25 @@ function sceneInit() {
         //     robot2.wheel_br_constraint.disableAngularMotor(2);
         // }
         switch (ev.keyCode) {
-            case 37:
+            case 74:
                 // Left
                 robot2.wheel_fl_constraint.disableAngularMotor(1);
                 robot2.wheel_fr_constraint.disableAngularMotor(1);
                 break;
 
-            case 39:
+            case 76:
                 // Right
                 robot2.wheel_fl_constraint.disableAngularMotor(1);
                 robot2.wheel_fr_constraint.disableAngularMotor(1);
                 break;
 
-            case 38:
+            case 73:
                 // Up
                 robot2.wheel_bl_constraint.disableAngularMotor(2);
                 robot2.wheel_br_constraint.disableAngularMotor(2);
                 break;
 
-            case 40:
+            case 75:
                 // Down
                 robot2.wheel_bl_constraint.disableAngularMotor(2);
                 robot2.wheel_br_constraint.disableAngularMotor(2);
@@ -779,18 +779,29 @@ function sceneInit() {
 
     // CHECK OBJECTS POSITIONS
     checkRobotPosition = () => {
-        if (robot1.body.position.y < 0 || robot2.body.position.y < 0) {
-            createRobot();
-            let readDisclaimer = document.querySelector('.read-disclaimer');
-            readDisclaimer.innerHTML = 'Did you read the disclaimer?';
-            setTimeout(function () {
-                readDisclaimer.innerHTML = '';
-            }, 2000);
+        if (robot1.body.position.y < 0) {
+            robot1 = createRobot(25, 5);
+        }
+        if (robot2.body.position.y < 0)
+        {
+            robot2 = createRobot(80, 5);
         }
     };
     checkBallPosition = () => {
-        if (ball.position.y < 0) {
+        if (ball.position.y < 0 && ball.position.z < 0) {
+            // Bola Masuk Kanan
             createBall();
+           scoreOneTwo[0]++;
+           const scoreString = 'Gamescore: ' + scoreOneTwo[0] + '-' + scoreOneTwo[1];
+            window.alert(scoreString);
+        }
+        else if (ball.position.y < 0 && ball.position.z > 0)
+        {
+            // Bola Masuk Kiri
+            createBall();
+            scoreOneTwo[1]++;
+            const scoreString = 'Gamescore: ' + scoreOneTwo[0] + '-' + scoreOneTwo[1];
+            window.alert(scoreString);
         }
     };
 

@@ -100,6 +100,7 @@ function sceneInit() {
     border_material.map.repeat.set(0.5, 0.5);
 
     let border_height = 20;
+    const borderGeo = new THREE.BoxGeometry(2, border_height, 200);
 
     // GROUND - BORDERS - EAST
     ground.east_border = new Physijs.BoxMesh(
@@ -315,7 +316,86 @@ function sceneInit() {
 
     // MOVEMENT
     document.addEventListener('keydown', function (ev) {
-        console.log(ev.keyCode);
+        // const keyPress = ev.code;
+        // if(keyPress == 'KeyA'){
+        //     // Left
+        //     robot1.wheel_fl_constraint.configureAngularMotor(
+        //         1,
+        //         -Math.PI / 4,
+        //         Math.PI / 4,
+        //         2,
+        //         400
+        //     );
+        //     robot1.wheel_fr_constraint.configureAngularMotor(
+        //         1,
+        //         -Math.PI / 4,
+        //         Math.PI / 4,
+        //         2,
+        //         400
+        //     );
+        //     robot1.wheel_fl_constraint.enableAngularMotor(1);
+        //     robot1.wheel_fr_constraint.enableAngularMotor(1);
+        // }
+        // else if (keyPress == 'keyD')
+        // {
+        //     // Right
+        //     robot1.wheel_fl_constraint.configureAngularMotor(
+        //         1,
+        //         -Math.PI / 4,
+        //         Math.PI / 4,
+        //         -2,
+        //         400
+        //     );
+        //     robot1.wheel_fr_constraint.configureAngularMotor(
+        //         1,
+        //         -Math.PI / 4,
+        //         Math.PI / 4,
+        //         -2,
+        //         400
+        //     );
+        //     robot1.wheel_fl_constraint.enableAngularMotor(1);
+        //     robot1.wheel_fr_constraint.enableAngularMotor(1);
+        // }
+        // else if (keyPress == 'keyW')
+        // {
+        //     // Up
+        //     robot1.wheel_bl_constraint.configureAngularMotor(
+        //         2,
+        //         1,
+        //         0,
+        //         30,
+        //         6000
+        //     );
+        //     robot1.wheel_br_constraint.configureAngularMotor(
+        //         2,
+        //         1,
+        //         0,
+        //         30,
+        //         6000
+        //     );
+        //     robot1.wheel_bl_constraint.enableAngularMotor(2);
+        //     robot1.wheel_br_constraint.enableAngularMotor(2);
+        // }
+        // else if (keyPress == 'KeyS')
+        // {
+        //     // Down
+        //     robot1.wheel_bl_constraint.configureAngularMotor(
+        //         2,
+        //         1,
+        //         0,
+        //         -20,
+        //         24000
+        //     );
+        //     robot1.wheel_br_constraint.configureAngularMotor(
+        //         2,
+        //         1,
+        //         0,
+        //         -20,
+        //         24000
+        //     );
+        //     robot1.wheel_bl_constraint.enableAngularMotor(2);
+        //     robot1.wheel_br_constraint.enableAngularMotor(2);
+        // }
         switch (ev.keyCode) {
             case 65:
                 // ------------------------------------------------------------------
@@ -404,6 +484,30 @@ function sceneInit() {
     });
 
     document.addEventListener('keyup', function (ev) {
+        // const keyPress = ev.code;
+        // if(keyPress == 'KeyA'){
+        //     // Left
+        //     robot1.wheel_fl_constraint.disableAngularMotor(1);
+        //     robot1.wheel_fr_constraint.disableAngularMotor(1);
+        // }
+        // else if (keyPress == 'keyD')
+        // {
+        //     // Right
+        //     robot1.wheel_fl_constraint.disableAngularMotor(1);
+        //     robot1.wheel_fr_constraint.disableAngularMotor(1);
+        // }
+        // else if (keyPress == 'keyW')
+        // {
+        //     // Up
+        //     robot1.wheel_bl_constraint.disableAngularMotor(2);
+        //     robot1.wheel_br_constraint.disableAngularMotor(2);
+        // }
+        // else if (keyPress == 'KeyS')
+        // {
+        //     // Down
+        //     robot1.wheel_bl_constraint.disableAngularMotor(2);
+        //     robot1.wheel_br_constraint.disableAngularMotor(2);
+        // }
         switch (ev.keyCode) {
             case 65:
                 // Left
@@ -433,7 +537,86 @@ function sceneInit() {
 
     // MOVEMENT 2nd ROBOT
     document.addEventListener('keydown', function (ev) {
-        console.log(ev.keyCode);
+        // const keyPress = ev.code;
+        // if(keyPress == 'KeyJ'){
+        //     // Left
+        //     robot2.wheel_fl_constraint.configureAngularMotor(
+        //         1,
+        //         -Math.PI / 4,
+        //         Math.PI / 4,
+        //         2,
+        //         400
+        //     );
+        //     robot2.wheel_fr_constraint.configureAngularMotor(
+        //         1,
+        //         -Math.PI / 4,
+        //         Math.PI / 4,
+        //         2,
+        //         400
+        //     );
+        //     robot2.wheel_fl_constraint.enableAngularMotor(1);
+        //     robot2.wheel_fr_constraint.enableAngularMotor(1);
+        // }
+        // else if (keyPress == 'keyL')
+        // {
+        //     // Right
+        //     robot2.wheel_fl_constraint.configureAngularMotor(
+        //         1,
+        //         -Math.PI / 4,
+        //         Math.PI / 4,
+        //         -2,
+        //         400
+        //     );
+        //     robot2.wheel_fr_constraint.configureAngularMotor(
+        //         1,
+        //         -Math.PI / 4,
+        //         Math.PI / 4,
+        //         -2,
+        //         400
+        //     );
+        //     robot2.wheel_fl_constraint.enableAngularMotor(1);
+        //     robot2.wheel_fr_constraint.enableAngularMotor(1);
+        // }
+        // else if (keyPress == 'keyI')
+        // {
+        //     // Up
+        //     robot2.wheel_bl_constraint.configureAngularMotor(
+        //         2,
+        //         1,
+        //         0,
+        //         30,
+        //         6000
+        //     );
+        //     robot2.wheel_br_constraint.configureAngularMotor(
+        //         2,
+        //         1,
+        //         0,
+        //         30,
+        //         6000
+        //     );
+        //     robot2.wheel_bl_constraint.enableAngularMotor(2);
+        //     robot2.wheel_br_constraint.enableAngularMotor(2);
+        // }
+        // else if (keyPress == 'KeyK')
+        // {
+        //     // Down
+        //     robot2.wheel_bl_constraint.configureAngularMotor(
+        //         2,
+        //         1,
+        //         0,
+        //         -20,
+        //         24000
+        //     );
+        //     robot2.wheel_br_constraint.configureAngularMotor(
+        //         2,
+        //         1,
+        //         0,
+        //         -20,
+        //         24000
+        //     );
+        //     robot2.wheel_bl_constraint.enableAngularMotor(2);
+        //     robot2.wheel_br_constraint.enableAngularMotor(2);
+        // }
         switch (ev.keyCode) {
             case 37:
                 // ------------------------------------------------------------------
@@ -522,6 +705,30 @@ function sceneInit() {
     });
 
     document.addEventListener('keyup', function (ev) {
+        // const keyPress = ev.code;
+        // if(keyPress == 'KeyJ'){
+        //     // Left
+        //     robot2.wheel_fl_constraint.disableAngularMotor(1);
+        //     robot2.wheel_fr_constraint.disableAngularMotor(1);
+        // }
+        // else if (keyPress == 'keyL')
+        // {
+        //     // Right
+        //     robot2.wheel_fl_constraint.disableAngularMotor(1);
+        //     robot2.wheel_fr_constraint.disableAngularMotor(1);
+        // }
+        // else if (keyPress == 'keyI')
+        // {
+        //     // Up
+        //     robot2.wheel_bl_constraint.disableAngularMotor(2);
+        //     robot2.wheel_br_constraint.disableAngularMotor(2);
+        // }
+        // else if (keyPress == 'KeyK')
+        // {
+        //     // Down
+        //     robot2.wheel_bl_constraint.disableAngularMotor(2);
+        //     robot2.wheel_br_constraint.disableAngularMotor(2);
+        // }
         switch (ev.keyCode) {
             case 37:
                 // Left

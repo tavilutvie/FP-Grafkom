@@ -69,7 +69,7 @@ function sceneInit() {
     });
     ground_material = Physijs.createMaterial(
         new THREE.MeshLambertMaterial({ map: ground_texture }),
-        0.9,
+        2,
         0.4
     );
 
@@ -99,14 +99,15 @@ function sceneInit() {
         THREE.RepeatWrapping;
     border_material.map.repeat.set(0.5, 0.5);
 
-    let border_height = 20;
-    const borderGeo = new THREE.BoxGeometry(2, border_height, 200);
+    const border_height = 20;
+    const borderGeoOne = new THREE.BoxGeometry(2, border_height, 200)
+    const borderGeoTwo = new THREE.BoxGeometry(76, border_height, 2)
 
     // GROUND - BORDERS - EAST
     ground.east_border = new Physijs.BoxMesh(
-        new THREE.BoxGeometry(2, border_height, 200),
+        borderGeoOne,
         border_material,
-        0, 
+        0,  
         { restitution: 10, friction: 10 }
     );
     ground.east_border.position.set(99, border_height / 2 + 0.5, 0);
@@ -114,7 +115,7 @@ function sceneInit() {
 
     // GROUND - BORDERS - WEST
     ground.west_border = new Physijs.BoxMesh(
-        new THREE.BoxGeometry(2, border_height, 200),
+        borderGeoOne,
         border_material,
         0, 
         { restitution: 10, friction: 10 }
@@ -124,7 +125,7 @@ function sceneInit() {
 
     // GROUND - BORDERS - NORTH
     ground.north_border_1 = new Physijs.BoxMesh(
-        new THREE.BoxGeometry(76, border_height, 2),
+        borderGeoTwo,
         border_material,
         0, 
         { restitution: 10, friction: 10 }
@@ -133,7 +134,7 @@ function sceneInit() {
     scene.add(ground.north_border_1);
 
     ground.north_border_2 = new Physijs.BoxMesh(
-        new THREE.BoxGeometry(76, border_height, 2),
+        borderGeoTwo,
         border_material,
         0, 
         { restitution: 10, friction: 10 }
@@ -143,7 +144,7 @@ function sceneInit() {
 
     // GROUND - BORDERS - SOUTH
     ground.south_border_1 = new Physijs.BoxMesh(
-        new THREE.BoxGeometry(76, border_height, 2),
+        borderGeoTwo,
         border_material,
         0, 
         { restitution: 10, friction: 10 }
@@ -152,7 +153,7 @@ function sceneInit() {
     scene.add(ground.south_border_1);
 
     ground.south_border_2 = new Physijs.BoxMesh(
-        new THREE.BoxGeometry(76, border_height, 2),
+        borderGeoTwo,
         border_material,
         0, 
         { restitution: 10, friction: 10 }
@@ -767,7 +768,7 @@ function sceneInit() {
         ball = new Physijs.SphereMesh(
             new THREE.SphereGeometry(5, 18, 20),
             ball_material,
-            20, // mass
+            1 , // mass
             { restitution: 10, friction: 10 }
         );
         ball.position.x = -10;

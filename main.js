@@ -10,9 +10,6 @@ let render,
   ground = {},
   light,
   camera,
-  checkRobotPosition,
-  createBall,
-  checkBallPosition,
   scoreOneTwo = [0, 0];
 
 function sceneInit() {
@@ -25,8 +22,8 @@ function sceneInit() {
   scene.setGravity(new THREE.Vector3(0, -100, 0));
   scene.addEventListener("update", function () {
     scene.simulate(undefined, 2);
-    checkRobotPosition();
-    checkBallPosition();
+    gameController.checkRobotPosition(robot1, robot2);
+    gameController.checkBallPosition(ball1);
   });
 
   camera = new THREE.PerspectiveCamera(
@@ -509,52 +506,33 @@ function sceneInit() {
   }
   let ball1 = new ball();
 
-//   class gameController{
-//     static checkRobotPosition(){
-//         if (robot1.body.position.y < 0) {
-//             delete robot1;
-//             robot1 = new robot(0, 5, 0xf6cb1c, 50);
-      
-//           }
-//           if (robot2.body.position.y < 0) {
-//             alert("robot2 jatoh");
-//             delete robot2;
-//             robot2 = new robot(0, 5, 0xc74b0e, -50);
-//           }
-//         };
-//     }
-//   }
-  // CHECK OBJECTS POSITIONS
-  checkRobotPosition = () => {
-    if (robot1.body.position.y < 0) {
-      delete robot1;
-      robot1 = new robot(0, 5, 0xf6cb1c, 50);
+  class gameController{
+    static checkRobotPosition(){
+        if (robot1.body.position.y < 0) {
+            robot1 = new robot(0, 5, 0xf6cb1c, 50);
+          }
+          if (robot2.body.position.y < 0) {
+            robot2 = new robot(0, 5, 0xc74b0e, -50);
+          }
+        };
+    static checkBallPosition(){
+        if (ball1.ballMesh.position.y < 0 && ball1.ballMesh.position.z < 0) {
+            // Bola Masuk Kanan
+            ball1 = new ball();
+            scoreOneTwo[0]++;
+            const scoreString = "Gamescore: " + scoreOneTwo[0] + "-" + scoreOneTwo[1];
+            window.alert(scoreString);
+          } else if (ball1.ballMesh.position.y < 0 && ball1.ballMesh.position.z > 0) {
+            // Bola Masuk Kiri
+            ball1 = new ball();
+            scoreOneTwo[1]++;
+            const scoreString = "Gamescore: " + scoreOneTwo[0] + "-" + scoreOneTwo[1];
+            window.alert(scoreString);
+          }
+    }
+    }
 
-    }
-    if (robot2.body.position.y < 0) {
-      alert("robot2 jatoh");
-      delete robot2;
-      robot2 = new robot(0, 5, 0xc74b0e, -50);
-    }
-  };
-  checkBallPosition = () => {
-    // alert('bola jatoh')
-    if (ball1.ballMesh.position.y < 0 && ball1.ballMesh.position.z < 0) {
-      // Bola Masuk Kanan
-      delete ball1;
-      ball1 = new ball();
-      scoreOneTwo[0]++;
-      const scoreString = "Gamescore: " + scoreOneTwo[0] + "-" + scoreOneTwo[1];
-      window.alert(scoreString);
-    } else if (ball.position.y < 0 && ball.position.z > 0) {
-      // Bola Masuk Kiri
-      delete ball1;
-      ball1 = new ball();
-      scoreOneTwo[1]++;
-      const scoreString = "Gamescore: " + scoreOneTwo[0] + "-" + scoreOneTwo[1];
-      window.alert(scoreString);
-    }
-  };
+  // CHECK OBJECTS POSITIONS
 
   requestAnimationFrame(render);
   scene.simulate();

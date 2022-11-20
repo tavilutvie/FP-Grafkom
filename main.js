@@ -147,8 +147,6 @@ function sceneInit() {
   scene.add(ground.south_border_2);
   class robot {
     constructor(rbx, rby, color, rbz) {
-      let robot = {};
-
       let robot_texture = loader.load("/images/car.jpg", function (texture) {
         texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
         texture.offset.set(0, 0);
@@ -301,12 +299,11 @@ function sceneInit() {
       });
     }
   }
- const robot1 = new robot(0, 5, 0xf6cb1c, 50);
+  const robot1 = new robot(0, 5, 0xf6cb1c, 50);
   const robot2 = new robot(0, 5, 0xc74b0e, -50);
 
   // MOVEMENT
   document.addEventListener("keydown", function (ev) {
-
     switch (ev.keyCode) {
       case 65:
         // ------------------------------------------------------------------
@@ -492,45 +489,48 @@ function sceneInit() {
   });
 
   // BALL
-  class ball{
-    constructor(){
-        this.ball_material = Physijs.createMaterial(
-            new THREE.MeshLambertMaterial({ color: 0xffffff }),
-            0.1,
-            1
-          );
-        this.ballMesh = new Physijs.SphereMesh(
-            new THREE.SphereGeometry(5, 18, 20),
-            this.ball_material,
-            1, // mass
-            { restitution: 10, friction: 10 }
-          );
-          this.ballMesh.position.x = 0;
-          this.ballMesh.position.y = 25;
-          scene.add(this.ballMesh);
+  class ball {
+    constructor() {
+      this.ball_material = Physijs.createMaterial(
+        new THREE.MeshLambertMaterial({ color: 0xffffff }),
+        0.1,
+        1
+      );
+      this.ballMesh = new Physijs.SphereMesh(
+        new THREE.SphereGeometry(5, 18, 20),
+        this.ball_material,
+        1, // mass
+        { restitution: 10, friction: 10 }
+      );
+      this.ballMesh.position.x = 0;
+      this.ballMesh.position.y = 25;
+      scene.add(this.ballMesh);
     }
-
   }
   const ball1 = new ball();
-  alert(ball1.ballMesh.position.y)
 
   // CHECK OBJECTS POSITIONS
   checkRobotPosition = () => {
-    if (robot1.robot.body.position.y < 0) {
+    if (robot1.body.position.y < 0) {
+      alert("robot1 jatoh");
+    //   delete robot1;
       robot1 = new robot(0, 5, 0xf6cb1c, 50);
     }
-    if (robot2.robot.body.position.y < 0) {
+    if (robot2.body.position.y < 0) {
+      alert("robot2 jatoh");
+    //   delete robot2;
       robot2 = new robot(0, 5, 0xc74b0e, -50);
     }
   };
   checkBallPosition = () => {
+    // alert('bola jatoh')
     if (ball1.ballMesh.position.y < 0 && ball1.ballMesh.position.z < 0) {
       // Bola Masuk Kanan
       ball1 = new ball();
       scoreOneTwo[0]++;
       const scoreString = "Gamescore: " + scoreOneTwo[0] + "-" + scoreOneTwo[1];
       window.alert(scoreString);
-    } else if (ball.ballMesh.position.y < 0 && ball.ballMesh.position.z > 0) {
+    } else if (ball.position.y < 0 && ball.position.z > 0) {
       // Bola Masuk Kiri
       ball1 = new ball();
       scoreOneTwo[1]++;

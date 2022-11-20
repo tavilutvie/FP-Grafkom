@@ -63,7 +63,7 @@ function sceneInit() {
 
     // GROUND
     loader = new THREE.TextureLoader();
-    var ground_texture = loader.load('/images/light-gray-concrete-wall.jpg', function (texture) {
+    var ground_texture = loader.load('/images/field.jpg', function (texture) {
         texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
         texture.offset.set(0, 0);
     });
@@ -101,7 +101,7 @@ function sceneInit() {
 
     const border_height = 20;
     const borderGeoOne = new THREE.BoxGeometry(2, border_height, 200)
-    const borderGeoTwo = new THREE.BoxGeometry(1, border_height, 2)
+    const borderGeoTwo = new THREE.BoxGeometry(75, border_height, 2)
 
     // GROUND - BORDERS - EAST
     ground.east_border = new Physijs.BoxMesh(
@@ -162,10 +162,16 @@ function sceneInit() {
     scene.add(ground.south_border_2);
 
      // car
-     createRobot = (rbx, rby, rbz) => {
+     createRobot = (rbx, rby, color) => {
         let robot = {};
+
+        var robot_texture = loader.load('/images/car.jpg', function (texture) {
+            texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+            texture.offset.set(0, 0);
+        });
+
         robot_material = Physijs.createMaterial(
-            new THREE.MeshLambertMaterial({ color: 0x5ab7cc  }),
+            new THREE.MeshLambertMaterial({ map: robot_texture, color: color }),
             0.8,
             0.2
         );
@@ -311,8 +317,8 @@ function sceneInit() {
         });
         return robot;
     };
-    robot1 = createRobot(25, 5);
-    robot2 = createRobot(80, 5);
+    robot1 = createRobot(25, 5, 0xf6cb1c);
+    robot2 = createRobot(80, 5, 0xc74b0e);
 
 
     // MOVEMENT
@@ -780,19 +786,19 @@ function sceneInit() {
     // CHECK OBJECTS POSITIONS
     checkRobotPosition = () => {
         if (robot1.body.position.y < 0) {
-            robot1 = createRobot(25, 5);
+            robot1 = createRobot(25, 5, 0xf6cb1c);
         }
         if (robot2.body.position.y < 0)
         {
-            robot2 = createRobot(80, 5);
+            robot2 = createRobot(80, 5, 0xc74b0e);
         }
     };
     checkBallPosition = () => {
         if (ball.position.y < 0 && ball.position.z < 0) {
             // Bola Masuk Kanan
             createBall();
-           scoreOneTwo[0]++;
-           const scoreString = 'Gamescore: ' + scoreOneTwo[0] + '-' + scoreOneTwo[1];
+            scoreOneTwo[0]++;
+            const scoreString = 'Gamescore: ' + scoreOneTwo[0] + '-' + scoreOneTwo[1];
             window.alert(scoreString);
         }
         else if (ball.position.y < 0 && ball.position.z > 0)

@@ -299,8 +299,8 @@ function sceneInit() {
       });
     }
   }
-  const robot1 = new robot(0, 5, 0xf6cb1c, 50);
-  const robot2 = new robot(0, 5, 0xc74b0e, -50);
+  let robot1 = new robot(0, 5, 0xf6cb1c, 50);
+  let robot2 = new robot(0, 5, 0xc74b0e, -50);
 
   // MOVEMENT
   document.addEventListener("keydown", function (ev) {
@@ -507,18 +507,33 @@ function sceneInit() {
       scene.add(this.ballMesh);
     }
   }
-  const ball1 = new ball();
+  let ball1 = new ball();
 
+//   class gameController{
+//     static checkRobotPosition(){
+//         if (robot1.body.position.y < 0) {
+//             delete robot1;
+//             robot1 = new robot(0, 5, 0xf6cb1c, 50);
+      
+//           }
+//           if (robot2.body.position.y < 0) {
+//             alert("robot2 jatoh");
+//             delete robot2;
+//             robot2 = new robot(0, 5, 0xc74b0e, -50);
+//           }
+//         };
+//     }
+//   }
   // CHECK OBJECTS POSITIONS
   checkRobotPosition = () => {
     if (robot1.body.position.y < 0) {
-      alert("robot1 jatoh");
-    //   delete robot1;
+      delete robot1;
       robot1 = new robot(0, 5, 0xf6cb1c, 50);
+
     }
     if (robot2.body.position.y < 0) {
       alert("robot2 jatoh");
-    //   delete robot2;
+      delete robot2;
       robot2 = new robot(0, 5, 0xc74b0e, -50);
     }
   };
@@ -526,12 +541,14 @@ function sceneInit() {
     // alert('bola jatoh')
     if (ball1.ballMesh.position.y < 0 && ball1.ballMesh.position.z < 0) {
       // Bola Masuk Kanan
+      delete ball1;
       ball1 = new ball();
       scoreOneTwo[0]++;
       const scoreString = "Gamescore: " + scoreOneTwo[0] + "-" + scoreOneTwo[1];
       window.alert(scoreString);
     } else if (ball.position.y < 0 && ball.position.z > 0) {
       // Bola Masuk Kiri
+      delete ball1;
       ball1 = new ball();
       scoreOneTwo[1]++;
       const scoreString = "Gamescore: " + scoreOneTwo[0] + "-" + scoreOneTwo[1];

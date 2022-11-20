@@ -162,7 +162,7 @@ function sceneInit() {
     scene.add(ground.south_border_2);
 
      // car
-     createRobot = (rbx, rby, color) => {
+     createRobot = (rbx, rby, color, rbz) => {
         let robot = {};
 
         var robot_texture = loader.load('/images/car.jpg', function (texture) {
@@ -189,7 +189,7 @@ function sceneInit() {
         wheel_pos_fx = rbx - 4.5;
         wheel_pos_bx = rbx + 4.5;
         wheel_pos_y =  rby/2;
-        wheel_pos_z = 6;
+        wheel_pos_z = rbz + 6;
 
         // ROBOT BODY
         robot.body = new Physijs.BoxMesh(
@@ -197,7 +197,7 @@ function sceneInit() {
             robot_material,
             3000
         );
-        robot.body.position.set(rbx, rby, 0);
+        robot.body.position.set(rbx, rby, rbz);
         robot.body.receiveShadow = robot.body.castShadow = true;
 
         scene.add(robot.body);
@@ -238,13 +238,13 @@ function sceneInit() {
             { restitution: 0, friction: 1 }
         );
         robot.wheel_fr.rotation.x = Math.PI / 2;
-        robot.wheel_fr.position.set(wheel_pos_fx, wheel_pos_y, -wheel_pos_z);
+        robot.wheel_fr.position.set(wheel_pos_fx, wheel_pos_y, wheel_pos_z-12);
         robot.wheel_fr.receiveShadow = robot.wheel_fr.castShadow = true;
         scene.add(robot.wheel_fr);
         robot.wheel_fr_constraint = new Physijs.DOFConstraint(
             robot.wheel_fr,
             robot.body,
-            new THREE.Vector3(wheel_pos_fx, wheel_pos_y, -wheel_pos_z)
+            new THREE.Vector3(wheel_pos_fx, wheel_pos_y, wheel_pos_z-12)
         );
         scene.addConstraint(robot.wheel_fr_constraint);
         robot.wheel_fr_constraint.setAngularLowerLimit({
@@ -296,13 +296,13 @@ function sceneInit() {
             { restitution: 0, friction: 1 }
         );
         robot.wheel_br.rotation.x = Math.PI / 2;
-        robot.wheel_br.position.set(wheel_pos_bx, wheel_pos_y, -wheel_pos_z);
+        robot.wheel_br.position.set(wheel_pos_bx, wheel_pos_y, wheel_pos_z-12);
         robot.wheel_br.receiveShadow = robot.wheel_br.castShadow = true;
         scene.add(robot.wheel_br);
         robot.wheel_br_constraint = new Physijs.DOFConstraint(
             robot.wheel_br,
             robot.body,
-            new THREE.Vector3(wheel_pos_bx, wheel_pos_y, -wheel_pos_z)
+            new THREE.Vector3(wheel_pos_bx, wheel_pos_y, wheel_pos_z-12)
         );
         scene.addConstraint(robot.wheel_br_constraint);
         robot.wheel_br_constraint.setAngularLowerLimit({
@@ -317,8 +317,8 @@ function sceneInit() {
         });
         return robot;
     };
-    robot1 = createRobot(25, 5, 0xf6cb1c);
-    robot2 = createRobot(80, 5, 0xc74b0e);
+    robot1 = createRobot(0, 5, 0xf6cb1c, 50);
+    robot2 = createRobot(0, 5, 0xc74b0e, -50);
 
 
     // MOVEMENT
@@ -777,7 +777,7 @@ function sceneInit() {
             1 , // mass
             { restitution: 10, friction: 10 }
         );
-        ball.position.x = -10;
+        ball.position.x = 0;
         ball.position.y = 25;
         scene.add(ball);
     };
@@ -786,11 +786,11 @@ function sceneInit() {
     // CHECK OBJECTS POSITIONS
     checkRobotPosition = () => {
         if (robot1.body.position.y < 0) {
-            robot1 = createRobot(25, 5, 0xf6cb1c);
+            robot1 = createRobot(0, 5, 0xf6cb1c, 50);
         }
         if (robot2.body.position.y < 0)
         {
-            robot2 = createRobot(80, 5, 0xc74b0e);
+            robot2 = createRobot(0, 5, 0xc74b0e, -50);
         }
     };
     checkBallPosition = () => {
